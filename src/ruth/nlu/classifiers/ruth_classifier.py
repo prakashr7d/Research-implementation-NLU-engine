@@ -1,9 +1,8 @@
-from typing import Any, Dict, Text, List
+from typing import Any, Dict, List, Text
 
 from numpy import ndarray
-from sklearn.preprocessing import LabelEncoder
-
 from ruth.shared.nlu.ruth_elements import Element
+from sklearn.preprocessing import LabelEncoder
 
 
 class IntentClassifier(Element):

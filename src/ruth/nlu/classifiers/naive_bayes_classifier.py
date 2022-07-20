@@ -4,15 +4,14 @@ from typing import Any, Dict, Text, Tuple
 
 import sklearn
 from numpy import argsort, fliplr, ndarray, reshape
-from scipy import sparse
-from sklearn.preprocessing import LabelEncoder
-
 from ruth.constants import INTENT, INTENT_RANKING
 from ruth.nlu.classifiers import LABEL_RANKING_LIMIT
 from ruth.nlu.classifiers.ruth_classifier import IntentClassifier
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_data import RuthData
 from ruth.shared.utils import json_pickle, json_unpickle
+from scipy import sparse
+from sklearn.preprocessing import LabelEncoder
 
 logger = logging.getLogger(__name__)
 
@@ -21,10 +20,10 @@ class NaiveBayesClassifier(IntentClassifier):
     defaults = {"priors": None, "var_smoothing": 1e-9}
 
     def __init__(
-            self,
-            element_config: Dict[Text, Any],
-            le: LabelEncoder = None,
-            model: "sklearn.naive_bayes.GaussianNB" = None,
+        self,
+        element_config: Dict[Text, Any],
+        le: LabelEncoder = None,
+        model: "sklearn.naive_bayes.GaussianNB" = None,
     ):
         super(NaiveBayesClassifier, self).__init__(element_config=element_config, le=le)
 
@@ -85,8 +84,8 @@ class NaiveBayesClassifier(IntentClassifier):
 
         if intents.size > 0 and probabilities.size > 0:
             ranking = list(zip(list(intents), list(probabilities)))[
-                      :LABEL_RANKING_LIMIT
-                      ]
+                :LABEL_RANKING_LIMIT
+            ]
             intent = {"name": intents[0], "accuracy": probabilities[0]}
             intent_rankings = [
                 {"name": name, "accuracy": probability} for name, probability in ranking

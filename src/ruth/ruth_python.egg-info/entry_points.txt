@@ -1,3 +1,0 @@
-[console_scripts]
-ruth = ruth.cli.cli:entrypoint
-

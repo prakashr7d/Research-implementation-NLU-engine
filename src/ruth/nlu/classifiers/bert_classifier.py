@@ -6,8 +6,8 @@ import torch
 from numpy import argsort, fliplr, ndarray
 from ruth.constants import INTENT, INTENT_RANKING
 from ruth.nlu.classifiers import LABEL_RANKING_LIMIT
-from ruth.nlu.classifiers.classifier import IntentClassifier
 from ruth.nlu.classifiers.constants import BATCH_SIZE, EPOCHS, MODEL_NAME
+from ruth.nlu.classifiers.ruth_classifier import IntentClassifier
 from ruth.shared.constants import TOKENS
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_data import RuthData

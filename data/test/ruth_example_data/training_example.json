@@ -4,7 +4,7 @@
     "text": "hi"
   },
   {
-    "intent": "greet",
-    "text": "hello ruth"
+    "intent": "not greet",
+    "text": "go away"
   }
 ]

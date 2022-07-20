@@ -1,22 +1,19 @@
 import logging
 from pathlib import Path
-from typing import Dict, Text, Any, List, Tuple
+from typing import Any, Dict, List, Text, Tuple
 
 import sklearn
-from numpy import reshape, ndarray, fliplr, argsort
+from numpy import argsort, fliplr, ndarray, reshape
 from rich.console import Console
 from ruth.constants import INTENT, INTENT_RANKING
-
 from ruth.nlu.classifiers import LABEL_RANKING_LIMIT
-
+from ruth.nlu.classifiers.ruth_classifier import IntentClassifier
+from ruth.shared.nlu.training_data.collections import TrainData
+from ruth.shared.nlu.training_data.ruth_data import RuthData
 from ruth.shared.utils import json_pickle, json_unpickle
 from scipy import sparse
 from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import LabelEncoder
-
-from ruth.nlu.classifiers.ruth_classifier import IntentClassifier
-from ruth.shared.nlu.training_data.collections import TrainData
-from ruth.shared.nlu.training_data.ruth_data import RuthData
 
 logger = logging.getLogger(__name__)
 
@@ -27,15 +24,18 @@ class SVMClassifier(IntentClassifier):
     defaults = {
         "C": [1, 2, 5, 10, 20, 100],
         "kernel": ["linear", "rbf"],
-        "gamma": ['auto', 0.1],
-        "decision_function_shape": ['ovr'],
+        "gamma": ["auto", 0.1],
+        "decision_function_shape": ["ovr"],
         "max_cross_validation_folds": 5,
-        "scoring": "f1_weighted"
+        "scoring": "f1_weighted",
     }
 
-    def __init__(self, element_config: Dict[Text, Any],
-                 le: LabelEncoder = None,
-                 clf: GridSearchCV = None):
+    def __init__(
+        self,
+        element_config: Dict[Text, Any],
+        le: LabelEncoder = None,
+        clf: GridSearchCV = None,
+    ):
         self.clf = clf
         super().__init__(element_config, le)
 
@@ -52,9 +52,7 @@ class SVMClassifier(IntentClassifier):
             "C": self.element_config["C"],
             "kernel": self.element_config["kernel"],
             "gamma": self.element_config["gamma"],
-            "decision_function_shape": self.element_config[
-                "decision_function_shape"
-            ],
+            "decision_function_shape": self.element_config["decision_function_shape"],
         }
 
     def _create_gridsearch(self, X, y) -> "sklearn.model_selection.GridSearchCV":
@@ -62,14 +60,17 @@ class SVMClassifier(IntentClassifier):
 
         clf = SVC(probability=True)
         param_grids = self.param_grids
-        return GridSearchCV(clf,
-                            param_grids,
-                            scoring=self.element_config["scoring"],
-                            cv=self.element_config["max_cross_validation_folds"]
-                            )
+        return GridSearchCV(
+            clf,
+            param_grids,
+            scoring=self.element_config["scoring"],
+            cv=self.element_config["max_cross_validation_folds"],
+        )
 
     def train(self, training_data: TrainData):
-        intents: List[Text] = [message.get(INTENT) for message in training_data.intent_examples]
+        intents: List[Text] = [
+            message.get(INTENT) for message in training_data.intent_examples
+        ]
         if len(set(intents)) < 2:
             logger.warning(
                 "There are no enough intent. "
@@ -129,8 +130,8 @@ class SVMClassifier(IntentClassifier):
 
         if intents.size > 0 and probabilities.size > 0:
             ranking = list(zip(list(intents), list(probabilities)))[
-                      :LABEL_RANKING_LIMIT
-                      ]
+                :LABEL_RANKING_LIMIT
+            ]
             intent = {"name": intents[0], "accuracy": probabilities[0]}
             intent_rankings = [
                 {"name": name, "accuracy": probability} for name, probability in ranking

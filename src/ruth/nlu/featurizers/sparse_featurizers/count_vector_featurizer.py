@@ -4,14 +4,14 @@ from typing import Any, Dict, List, Optional, Text
 
 from rich.console import Console
 from ruth.constants import TEXT
-from ruth.nlu.featurizers.sparse_featurizers.constants import CLASS_FEATURIZER_UNIQUE_NAME
+from ruth.nlu.featurizers.sparse_featurizers.constants import (
+    CLASS_FEATURIZER_UNIQUE_NAME,
+)
 from ruth.nlu.featurizers.sparse_featurizers.sparse_featurizer import SparseFeaturizer
-
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.feature import Feature
 from ruth.shared.nlu.training_data.ruth_data import RuthData
 from ruth.shared.utils import json_pickle, json_unpickle
-from scipy import sparse
 from sklearn.feature_extraction.text import CountVectorizer
 
 logger = logging.getLogger(__name__)
@@ -88,21 +88,19 @@ class CountVectorFeaturizer(SparseFeaturizer):
         except (AttributeError, KeyError):
             return False
 
-    def create_vectors(self, examples: List[RuthData]) -> List[sparse.spmatrix]:
+    def create_vectors(self, examples: List[RuthData]):
         features = []
         for message in examples:
             features.append(self.vectorizer.transform([message.get(TEXT)]))
         return features
 
-    def _get_featurizer_data(self, training_data: TrainData) -> List[sparse.spmatrix]:
+    def _get_featurizer_data(self, training_data: TrainData):
         if self._check_attribute_vocabulary():
             return self.create_vectors(training_data.training_examples)
         else:
             return []
 
-    def _add_features_to_data(
-        self, training_examples: List[RuthData], features: List[sparse.spmatrix]
-    ):
+    def _add_features_to_data(self, training_examples: List[RuthData], features):
         for message, feature in zip(training_examples, features):
             message.add_features(
                 Feature(feature, self.element_config[CLASS_FEATURIZER_UNIQUE_NAME])

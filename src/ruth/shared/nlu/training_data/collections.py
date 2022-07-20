@@ -39,4 +39,3 @@ class TrainData:
     def intent_examples(self) -> List[RuthData]:
         """Returns the list of examples that have intent."""
         return [ex for ex in self.training_examples if ex.get(INTENT)]
-

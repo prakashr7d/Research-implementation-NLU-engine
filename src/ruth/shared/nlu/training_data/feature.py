@@ -1,10 +1,10 @@
-from typing import Text
+from typing import Optional, Text
 
 from scipy import sparse
 
 
 class Feature:
-    def __init__(self, feature: sparse.spmatrix, origin: Text):
+    def __init__(self, feature: Optional[sparse.spmatrix], origin: Text):
         self.feature = feature
         self.origin = origin
 

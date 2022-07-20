@@ -12,16 +12,14 @@ long_description = (here / 'README.md').read_text(encoding='utf-8')
 
 core_requirements = [
     "click~=8.0.0",
-    "randomname~=0.1.3",
-    "coloredlogs~=14.0.0",
     "rich~=11.1.0",
     "aiohttp~=3.6.3",
-    "numpy~=1.16.1",
-    "requests~=2.23.0",
     "pandas~=1.2.5",
     "jsonpickle~=2.1.0",
     "pyyaml~=6.0",
-    "scipy~=1.8.0"
+    "torch~=1.11.0",
+    "regex",
+    "scikit-learn~=1.0.2",
 ]
 
 
@@ -31,13 +29,13 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     url="",
-    author='Prakash R',
-    author_email='prakashr7d@gmail.com',
+    author='Puretalk',
+    author_email='info@puretalk.ai',
     version=VERSION,
     install_requires=core_requirements,
     python_requires='>=3.7,<3.9',
-    package_dir={'': 'ruth'},
-    packages=setuptools.find_packages(where='ruth'),
+    package_dir={'': 'src'},
+    packages=setuptools.find_packages(where='src'),
     include_package_data=True,
     package_data={
         "data": ["*.txt"]

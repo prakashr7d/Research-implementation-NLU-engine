@@ -7,8 +7,7 @@ from ruth.shared.constants import ELEMENT_INDEX, KEY_LANGUAGE
 
 @property
 def default_pipline() -> List[Dict[Text, Any]]:
-    return [{"name": "CountVectorFeaturizer"},
-            {"name": "NaiveBayesClassifier"}]
+    return [{"name": "CountVectorFeaturizer"}, {"name": "NaiveBayesClassifier"}]
 
 
 class RuthConfig:
